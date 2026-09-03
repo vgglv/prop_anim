@@ -1,0 +1,16 @@
+{
+	"version": 8,
+	"configurePresets": [
+		{
+			"name": "ninja",
+			"displayName": "ninja",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/build",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": true,
+				"MONOLITH_EXTENSIONS_TESTS": false
+			}
+		}
+	]
+}
