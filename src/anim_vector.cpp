@@ -32,7 +32,7 @@ namespace prop_anim {
 			return name == animation->name();
 		});
 		if (it != _animations_vec.end()) {
-			(*it).get();
+			return (*it).get();
 		}
 		return nullptr;
 	}

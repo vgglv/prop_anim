@@ -9,6 +9,11 @@ namespace prop_anim {
 
 	struct AnimKey {
 		explicit AnimKey();
+		AnimKey(const AnimKey&) = delete;
+		AnimKey& operator=(const AnimKey&) = delete;
+
+		AnimKey(AnimKey&&) noexcept = default;
+		AnimKey& operator=(AnimKey&&) noexcept = default;
 		float time = 0.f;
 		AnyValue value;
 		uint32_t idx = 0;

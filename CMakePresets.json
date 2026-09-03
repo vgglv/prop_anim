@@ -8,8 +8,7 @@
 			"binaryDir": "${sourceDir}/build",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Debug",
-				"CMAKE_EXPORT_COMPILE_COMMANDS": true,
-				"MONOLITH_EXTENSIONS_TESTS": false
+				"CMAKE_EXPORT_COMPILE_COMMANDS": true
 			}
 		}
 	]

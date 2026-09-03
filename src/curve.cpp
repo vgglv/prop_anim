@@ -3,7 +3,7 @@
 
 
 namespace prop_anim {
-	CurveSample evaluate(const std::vector<KeyUniqPtr>& keys, float time) {
+	CurveSample get_curve(const std::vector<KeyUniqPtr>& keys, float time) {
 		if (keys.empty())
 			return {};
 

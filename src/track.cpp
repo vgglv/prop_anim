@@ -3,13 +3,15 @@
 #include <cassert>
 #include <prop_anim/track.hpp>
 #include <ranges>
+#include <prop_anim/curve.hpp>
+#include <prop_anim/easing.hpp>
 
 namespace {
 	uint32_t last_index = 0;
 }
 
 namespace prop_anim {
-	Track::Track() : _idx(++last_index) {
+	Track::Track(TypeRegistry& registry) : _idx(++last_index), _registry(registry) {
 	}
 
 	Track::~Track() = default;
@@ -26,8 +28,15 @@ namespace prop_anim {
 	}
 
 	void Track::update(float t) {
-		for (const auto& key : _keys_vec) {
-			//TODO: interpolate
+		if (!_binding) {
+			return;
+		}
+		CurveSample sample = get_curve(_keys_vec, t);
+		if (sample.is_exact) {
+			_binding->set(sample.from->value);
+		} else {
+			auto value = _registry.interpolate(sample.from->value.type(), sample.from->value, sample.to->value, sample.t);
+			_binding->set(value);
 		}
 	}
 
@@ -55,5 +64,9 @@ namespace prop_anim {
 
 	const std::vector<KeyUniqPtr>& Track::get_keys() const {
 		return _keys_vec;
+	}
+
+	void Track::set_property_binding(std::unique_ptr<PropertyBinding> binding) {
+		_binding = std::move(binding);
 	}
 }

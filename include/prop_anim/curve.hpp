@@ -10,5 +10,5 @@ namespace prop_anim {
 		bool is_exact = true;
 	};
 
-	CurveSample evaluate(const std::vector<KeyUniqPtr>& keys, float time);
+	CurveSample get_curve(const std::vector<KeyUniqPtr>& keys, float time);
 }

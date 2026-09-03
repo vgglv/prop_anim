@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <memory>
 #include <prop_anim/anim.hpp>
 #include <algorithm>
@@ -48,5 +49,13 @@ namespace prop_anim {
 
 	const std::vector<TrackUniqPtr>& Anim::get_tracks() const {
 		return _tracks_vec;
+	}
+
+	[[nodiscard]] float Anim::get_duration() const {
+		float result = 0.f;
+		for (const auto& track : _tracks_vec) {
+			result = std::max(track->get_total_duration(), result);
+		}
+		return result;
 	}
 }

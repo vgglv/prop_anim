@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 #include "key.hpp"
+#include "type_registry.hpp"
+#include "property_binding.hpp"
 
 namespace prop_anim {
 	class Track;
@@ -11,7 +13,7 @@ namespace prop_anim {
 	
 	class Track {
 	public:
-		Track();
+		Track(TypeRegistry& registry);
 		virtual ~Track();
 
 		[[nodiscard]] TrackIdx idx() const;
@@ -21,13 +23,15 @@ namespace prop_anim {
 		void insert_sorted(KeyUniqPtr key);
 		void remove_key(uint32_t idx);
 		void sort();
+		void set_property_binding(std::unique_ptr<PropertyBinding> binding);
 
-		virtual KeyUniqPtr create_key(float t) = 0;
 		virtual void setup_pose() {};
 		const std::vector<KeyUniqPtr>& get_keys() const;
 
 	private:
 		TrackIdx _idx;
 		std::vector<KeyUniqPtr> _keys_vec;
+		TypeRegistry& _registry;
+		std::unique_ptr<PropertyBinding> _binding;
 	};
 }
