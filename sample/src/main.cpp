@@ -1,6 +1,9 @@
 #include "nlohmann/json_fwd.hpp"
 #include "prop_anim/anim.hpp"
+#include "prop_anim/bezier_key.hpp"
+#include "prop_anim/bezier_track.hpp"
 #include "prop_anim/key.hpp"
+#include "prop_anim/property_track.hpp"
 #include "prop_anim/track.hpp"
 #include <memory>
 #include <raylib.h>
@@ -28,18 +31,18 @@ namespace {
 			const std::string name = anim_json["name"].get<std::string>();
 			prop_anim::AnimUniqPtr anim = std::make_unique<prop_anim::Anim>(name);
 			for (const auto& track_json : anim_json["tracks"]) {
-				prop_anim::TrackUniqPtr track = std::make_unique<prop_anim::Track>(registry);
+				prop_anim::PropertyTrackUniqPtr track = std::make_unique<prop_anim::PropertyTrack>(registry);
 				std::string track_type = track_json["type"].get<std::string>();
 				if (track_type == "pos") {
-					auto pos_binding = std::make_unique<prop_anim::MemberBinding<GameObject, Vector2>>(*obj, &GameObject::pos);
+					auto pos_binding = std::make_unique<prop_anim::MemberBinding<GameObject, Vector2>>("Vector2", *obj, &GameObject::pos);
 					track->set_property_binding(std::move(pos_binding));
 				}
 				if (track_type == "color") {
-					auto color_bind = std::make_unique<prop_anim::MemberBinding<GameObject, Color>>(*obj, &GameObject::color);
+					auto color_bind = std::make_unique<prop_anim::MemberBinding<GameObject, Color>>("Color", *obj, &GameObject::color);
 					track->set_property_binding(std::move(color_bind));
 				}
 				for (const auto& keys : track_json["keys"]) {
-					prop_anim::KeyUniqPtr key = std::make_unique<prop_anim::AnimKey>();
+					prop_anim::KeyUniqPtr key = std::make_unique<prop_anim::BaseKey>();
 					key->time = keys["time"].get<float>();
 					if (track_type == "pos") {
 						key->value = Vector2{keys["value"][0].get<float>(), keys["value"][1].get<float>()};
@@ -125,13 +128,16 @@ int main() {
 	SetRandomSeed(std::time(NULL));
 
 	prop_anim::TypeRegistry registry;
-	registry.register_type<Vector2>([](Vector2 a, Vector2 b, float t) -> Vector2 {
+	registry.register_type<Vector2>("Vector2", [](Vector2 a, Vector2 b, float t) -> Vector2 {
 		Vector2 pos = a + (b - a) * t;
 		return pos;
 	});
-	registry.register_type<Color>([](Color a, Color b, float t) -> Color {
-		Color result(static_cast<uint8_t>(a.r + ((b.r - a.r) * t)), static_cast<uint8_t>(a.g + ((b.g - a.g) * t)), static_cast<uint8_t>(a.b + ((b.b - a.b) * t)),
-			static_cast<uint8_t>(a.a + ((b.a - a.a) * t)));
+	registry.register_type<Color>("Color", [](Color a, Color b, float t) -> Color {
+		Color result;
+		result.r = static_cast<uint8_t>(a.r + ((b.r - a.r) * t));
+		result.g = static_cast<uint8_t>(a.g + ((b.g - a.g) * t));
+		result.b = static_cast<uint8_t>(a.b + ((b.b - a.b) * t));
+		result.a = static_cast<uint8_t>(a.a + ((b.a - a.a) * t));
 		return result;
 	});
 	std::string_view json_string = R"(
@@ -181,21 +187,86 @@ int main() {
 		}	
 	)";
 
+//	{
+//		GameObject* obj = addGameObject({0, 0}, {100, 100}, RED);
+//		nlohmann::json json = nlohmann::json::parse(json_string);
+//		auto anim_vector = deserialize_anim_vector(json, registry, obj);
+//		obj->anim_vector = std::move(anim_vector);
+//		obj->anim_vector->set_current_animation("default");
+//	}
+//
+//	for (int i = 0; i < 100; i++) {
+//		GameObject* obj = addGameObject({0, 0}, {32, 32}, RED);
+//		nlohmann::json json = generate_chaotic_anim();
+//		auto anim_vector = deserialize_anim_vector(json, registry, obj);
+//		obj->anim_vector = std::move(anim_vector);
+//		obj->anim_vector->set_current_animation("default");
+//	}
 	{
 		GameObject* obj = addGameObject({0, 0}, {100, 100}, RED);
-		nlohmann::json json = nlohmann::json::parse(json_string);
-		auto anim_vector = deserialize_anim_vector(json, registry, obj);
+		auto anim_vector = prop_anim::AnimVector::create();
+		auto anim = prop_anim::Anim::create("default");
+		{ //x prop
+			auto bezier_track_x = prop_anim::BezierTrack::create();
+			auto x_binding = std::make_unique<prop_anim::MemberBinding<Vector2, float>>("float", obj->pos, &Vector2::x);
+			bezier_track_x->set_property_binding(std::move(x_binding));
+			auto key1 = bezier_track_x->create_key(0.0f);
+			auto bezier_key1 = static_cast<prop_anim::BezierKey*>(key1.get());
+			bezier_key1->value = 0.f;
+			bezier_key1->in_handle = {-0.25f, 300.0f};
+			bezier_key1->out_handle = {1.f, -300.0f};
+			bezier_track_x->insert_sorted(std::move(key1));
+
+			auto key2 = bezier_track_x->create_key(2.0f);
+			auto bezier_key2 = static_cast<prop_anim::BezierKey*>(key2.get());
+			bezier_key2->value = 1280.f - 100.f;
+			bezier_key2->in_handle = {-0.25, 0.0f};
+			bezier_key2->out_handle = {1.f, 300.0f};
+			bezier_track_x->insert_sorted(std::move(key2));
+
+			auto key3 = bezier_track_x->create_key(4.0f);
+			auto bezier_key3 = static_cast<prop_anim::BezierKey*>(key3.get());
+			bezier_key3->value = 0.f;
+			bezier_key3->in_handle = {-0.25, 0.0f};
+			bezier_key3->out_handle = {0.25f, 0.0f};
+			bezier_track_x->insert_sorted(std::move(key3));
+
+			anim->add_track(std::move(bezier_track_x));
+		}
+
+		{ //y prop
+			auto bezier_track_y = prop_anim::BezierTrack::create();
+			auto y_binding = std::make_unique<prop_anim::MemberBinding<Vector2, float>>("float", obj->pos, &Vector2::y);
+			bezier_track_y->set_property_binding(std::move(y_binding));
+			auto key1 = bezier_track_y->create_key(0.0f);
+			auto bezier_key1 = static_cast<prop_anim::BezierKey*>(key1.get());
+			bezier_key1->value = 0.f;
+			bezier_key1->in_handle = {-0.25, 0.0f};
+			bezier_key1->out_handle = {0.25f, 0.0f};
+			bezier_track_y->insert_sorted(std::move(key1));
+
+			auto key2 = bezier_track_y->create_key(2.0f);
+			auto bezier_key2 = static_cast<prop_anim::BezierKey*>(key2.get());
+			bezier_key2->value = 720.f - 100.f;
+			bezier_key2->in_handle = {-0.25, 0.0f};
+			bezier_key2->out_handle = {0.25f, 0.0f};
+			bezier_track_y->insert_sorted(std::move(key2));
+
+			auto key3 = bezier_track_y->create_key(4.0f);
+			auto bezier_key3 = static_cast<prop_anim::BezierKey*>(key3.get());
+			bezier_key3->value = 0.f;
+			bezier_key3->in_handle = {-0.25, 0.0f};
+			bezier_key3->out_handle = {0.25f, 0.0f};
+			bezier_track_y->insert_sorted(std::move(key3));
+
+			anim->add_track(std::move(bezier_track_y));
+		}
+		anim_vector->add_animation(std::move(anim));
 		obj->anim_vector = std::move(anim_vector);
 		obj->anim_vector->set_current_animation("default");
 	}
 
-	for (int i = 0; i < 100; i++) {
-		GameObject* obj = addGameObject({0, 0}, {32, 32}, RED);
-		nlohmann::json json = generate_chaotic_anim();
-		auto anim_vector = deserialize_anim_vector(json, registry, obj);
-		obj->anim_vector = std::move(anim_vector);
-		obj->anim_vector->set_current_animation("default");
-	}
+	float slow_multiplier = 1.f;
 
 	while(!WindowShouldClose()) {
 		BeginDrawing();
@@ -207,11 +278,19 @@ int main() {
 		DrawFPS(10, 10);
 		EndDrawing();
 
-		float dt = GetFrameTime();
+		if (IsKeyPressed(KEY_MINUS)) {
+			slow_multiplier += .5f;
+		}
+		if (IsKeyPressed(KEY_EQUAL)) {
+			slow_multiplier -= .5f;
+		}
+
+		float dt = GetFrameTime() / slow_multiplier;
 		for (const auto& obj : object_vector) {
 			if (obj->stopped) {
 				continue;
 			}
+			obj->current_time += dt;
 			if (obj->anim_vector) {
 				obj->anim_vector->update(obj->current_time);
 				if (auto current_anim = obj->anim_vector->current_animation()) {
@@ -221,7 +300,6 @@ int main() {
 					}
 				}
 			}
-			obj->current_time += dt;
 		}
 
 		if (IsKeyPressed(KEY_D)) {

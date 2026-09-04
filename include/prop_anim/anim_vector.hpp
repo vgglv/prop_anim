@@ -4,6 +4,7 @@
 namespace prop_anim {
 	class AnimVector {
 	public:
+		static std::unique_ptr<AnimVector> create();
 		const std::vector<AnimUniqPtr>& get_animations() const;
 		void add_animation(AnimUniqPtr anim);
 		void remove_animation(const std::string& name);

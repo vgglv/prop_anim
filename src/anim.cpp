@@ -24,7 +24,7 @@ namespace prop_anim {
 	}
 
 	void Anim::remove_track(TrackIdx idx) {
-		const auto& it = std::ranges::find_if(_tracks_vec, [idx](const TrackUniqPtr& track) {
+		const auto& it = std::find_if(_tracks_vec.begin(), _tracks_vec.end(), [idx](const TrackUniqPtr& track) {
 			return track->idx() == idx;
 		});
 		if (it != _tracks_vec.end()) {
@@ -33,7 +33,7 @@ namespace prop_anim {
 	}
 
 	Track* Anim::find_track(TrackIdx idx) {
-		const auto& it = std::ranges::find_if(_tracks_vec, [idx](const TrackUniqPtr& track) {
+		const auto& it = std::find_if(_tracks_vec.begin(), _tracks_vec.end(), [idx](const TrackUniqPtr& track) {
 			return track->idx() == idx;
 		});
 		if (it != _tracks_vec.end()) {

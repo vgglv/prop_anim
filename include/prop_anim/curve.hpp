@@ -4,8 +4,8 @@
 
 namespace prop_anim {
 	struct CurveSample {
-		AnimKey* from = nullptr;
-		AnimKey* to = nullptr;
+		BaseKey* from = nullptr;
+		BaseKey* to = nullptr;
 		float t = 0.f;
 		bool is_exact = true;
 	};

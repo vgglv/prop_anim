@@ -5,5 +5,5 @@ namespace {
 }
 
 namespace prop_anim {
-	AnimKey::AnimKey() : idx(++last_index) {}
+	BaseKey::BaseKey() : idx(++last_index) {}
 }

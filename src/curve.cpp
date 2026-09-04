@@ -13,8 +13,8 @@ namespace prop_anim {
 		if (time >= keys.back()->time)
 			return {keys.back().get(), keys.back().get(), 1.f, true};
 
-		auto it = std::ranges::lower_bound(keys, time, std::ranges::less{}, [](const KeyUniqPtr& key) {
-			return key->time;
+		auto it = std::lower_bound(keys.begin(), keys.end(), time, [](const KeyUniqPtr& key, float t) {
+			return key->time < t;
 		});
 
 		auto* cur = it->get();

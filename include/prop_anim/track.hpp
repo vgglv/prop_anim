@@ -13,25 +13,23 @@ namespace prop_anim {
 	
 	class Track {
 	public:
-		Track(TypeRegistry& registry);
+		Track();
 		virtual ~Track();
 
 		[[nodiscard]] TrackIdx idx() const;
 		[[nodiscard]] float get_total_duration() const;
 
-		void update(float t);
+		virtual void update(float t) = 0;
 		void insert_sorted(KeyUniqPtr key);
 		void remove_key(uint32_t idx);
 		void sort();
-		void set_property_binding(std::unique_ptr<PropertyBinding> binding);
+		virtual KeyUniqPtr create_key(float time) = 0;
 
 		virtual void setup_pose() {};
 		const std::vector<KeyUniqPtr>& get_keys() const;
 
-	private:
+	protected:
 		TrackIdx _idx;
 		std::vector<KeyUniqPtr> _keys_vec;
-		TypeRegistry& _registry;
-		std::unique_ptr<PropertyBinding> _binding;
 	};
 }

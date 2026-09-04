@@ -3,17 +3,20 @@
 #include <any>
 
 namespace prop_anim {
-	struct AnimKey;
-	using KeyUniqPtr = std::unique_ptr<AnimKey>;
+	struct BaseKey;
+	using KeyUniqPtr = std::unique_ptr<BaseKey>;
 	using AnyValue = std::any;
 
-	struct AnimKey {
-		explicit AnimKey();
-		AnimKey(const AnimKey&) = delete;
-		AnimKey& operator=(const AnimKey&) = delete;
+	class BaseKey {
+	public:
+		explicit BaseKey();
+		virtual ~BaseKey() = default;
+		BaseKey(const BaseKey&) = delete;
+		BaseKey& operator=(const BaseKey&) = delete;
 
-		AnimKey(AnimKey&&) noexcept = default;
-		AnimKey& operator=(AnimKey&&) noexcept = default;
+		BaseKey(BaseKey&&) noexcept = default;
+		BaseKey& operator=(BaseKey&&) noexcept = default;
+
 		float time = 0.f;
 		AnyValue value;
 		uint32_t idx = 0;

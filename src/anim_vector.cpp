@@ -3,12 +3,16 @@
 #include <cassert>
 
 namespace prop_anim {
+	std::unique_ptr<AnimVector> AnimVector::create() {
+		return std::make_unique<AnimVector>();
+	}
+
 	const std::vector<AnimUniqPtr>& AnimVector::get_animations() const {
 		return _animations_vec;
 	}
 
 	void AnimVector::add_animation(AnimUniqPtr anim) {
-		auto it = std::ranges::find_if(_animations_vec, [name = anim->name()](const AnimUniqPtr& anim) {
+		auto it = std::find_if(_animations_vec.begin(), _animations_vec.end(), [name = anim->name()](const AnimUniqPtr& anim) {
 			return anim->name() == name;
 		});
 		if (it != _animations_vec.end()) {
@@ -19,7 +23,7 @@ namespace prop_anim {
 	}
 
 	void AnimVector::remove_animation(const std::string& name) {
-		const auto& it = std::ranges::find_if(_animations_vec, [name](const AnimUniqPtr& animation) {
+		const auto& it = std::find_if(_animations_vec.begin(), _animations_vec.end(), [name](const AnimUniqPtr& animation) {
 			return name == animation->name();
 		});
 		if (it != _animations_vec.end()) {
@@ -28,7 +32,7 @@ namespace prop_anim {
 	}
 
 	[[nodiscard]] Anim* AnimVector::find_animation(const std::string& name) const {
-		const auto& it = std::ranges::find_if(_animations_vec, [name](const AnimUniqPtr& animation) {
+		const auto& it = std::find_if(_animations_vec.begin(), _animations_vec.end(), [name](const AnimUniqPtr& animation) {
 			return name == animation->name();
 		});
 		if (it != _animations_vec.end()) {

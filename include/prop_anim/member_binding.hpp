@@ -6,7 +6,7 @@ namespace prop_anim {
 	public:
 		using Member = Value Object::*;
 
-		MemberBinding(Object& object, Member member) : _object(&object), _member(member) {}
+		MemberBinding(const std::string& type_name, Object& object, Member member) : PropertyBinding(type_name), _object(&object), _member(member) {}
 
 		void set(const AnyValue& value) override {
 			_object->*_member = std::any_cast<Value>(value);
