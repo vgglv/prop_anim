@@ -17,7 +17,6 @@ namespace prop_anim {
 		CurveSample sample = get_curve(_keys_vec, t);
 		if (sample.is_exact) {
 			_binding->set(sample.from->value);
-			printf("t=%.2f, std v=%.2f\n", t, std::any_cast<float>(sample.from->value));
 		} else {
 			auto key_left = static_cast<BezierKey*>(sample.from);
 			auto key_right = static_cast<BezierKey*>(sample.to);
