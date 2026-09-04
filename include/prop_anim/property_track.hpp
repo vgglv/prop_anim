@@ -1,5 +1,4 @@
 #pragma once
-#include "key.hpp"
 #include "type_registry.hpp"
 #include "track.hpp"
 #include "property_binding.hpp"
@@ -16,7 +15,6 @@ namespace prop_anim {
 
 		void update(float t) override;
 		void set_property_binding(std::unique_ptr<PropertyBinding> binding);
-		KeyUniqPtr create_key(float t) override;
 
 	private:
 		TypeRegistry& _registry;

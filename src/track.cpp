@@ -1,10 +1,6 @@
-#include "prop_anim/key.hpp"
+#include <prop_anim/track.hpp>
 #include <algorithm>
 #include <cassert>
-#include <prop_anim/track.hpp>
-#include <ranges>
-#include <prop_anim/curve.hpp>
-#include <prop_anim/easing.hpp>
 
 namespace {
 	uint32_t last_index = 0;

@@ -20,10 +20,4 @@ namespace prop_anim {
 	void PropertyTrack::set_property_binding(std::unique_ptr<PropertyBinding> binding) {
 		_binding = std::move(binding);
 	}
-
-	KeyUniqPtr PropertyTrack::create_key(float t) {
-		auto key = std::make_unique<BaseKey>();
-		key->time = t;
-		return key;
-	}
 }

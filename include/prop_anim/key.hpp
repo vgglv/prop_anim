@@ -17,8 +17,25 @@ namespace prop_anim {
 		BaseKey(BaseKey&&) noexcept = default;
 		BaseKey& operator=(BaseKey&&) noexcept = default;
 
+		static KeyUniqPtr create(float t);
+
 		float time = 0.f;
 		AnyValue value;
 		uint32_t idx = 0;
+	};
+
+	struct Point {
+		float x;
+		float y;
+	};
+
+	class BezierKey : public BaseKey {
+	public:
+		~BezierKey() override = default;
+
+		static std::unique_ptr<BezierKey> create(float t);
+
+		Point in_handle{};
+		Point out_handle{};
 	};
 }

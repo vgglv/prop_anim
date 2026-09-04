@@ -1,6 +1,5 @@
-#include "prop_anim/curve.hpp"
+#include <prop_anim/curve.hpp>
 #include <algorithm>
-
 
 namespace prop_anim {
 	CurveSample get_curve(const std::vector<KeyUniqPtr>& keys, float time) {

@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include "track.hpp"
-#include <string_view>
 
 namespace prop_anim {
 	class Anim;

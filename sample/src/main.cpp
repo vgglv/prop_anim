@@ -1,6 +1,5 @@
 #include "nlohmann/json_fwd.hpp"
 #include "prop_anim/anim.hpp"
-#include "prop_anim/bezier_key.hpp"
 #include "prop_anim/bezier_track.hpp"
 #include "prop_anim/key.hpp"
 #include "prop_anim/property_track.hpp"
@@ -210,21 +209,21 @@ int main() {
 			auto bezier_track_x = prop_anim::BezierTrack::create();
 			auto x_binding = std::make_unique<prop_anim::MemberBinding<Vector2, float>>("float", obj->pos, &Vector2::x);
 			bezier_track_x->set_property_binding(std::move(x_binding));
-			auto key1 = bezier_track_x->create_key(0.0f);
+			auto key1 = prop_anim::BezierKey::create(0.0f);
 			auto bezier_key1 = static_cast<prop_anim::BezierKey*>(key1.get());
 			bezier_key1->value = 0.f;
 			bezier_key1->in_handle = {-0.25f, 300.0f};
 			bezier_key1->out_handle = {1.f, -300.0f};
 			bezier_track_x->insert_sorted(std::move(key1));
 
-			auto key2 = bezier_track_x->create_key(2.0f);
+			auto key2 = prop_anim::BezierKey::create(2.0f);
 			auto bezier_key2 = static_cast<prop_anim::BezierKey*>(key2.get());
 			bezier_key2->value = 1280.f - 100.f;
 			bezier_key2->in_handle = {-0.25, 0.0f};
 			bezier_key2->out_handle = {1.f, 300.0f};
 			bezier_track_x->insert_sorted(std::move(key2));
 
-			auto key3 = bezier_track_x->create_key(4.0f);
+			auto key3 = prop_anim::BezierKey::create(4.0f);
 			auto bezier_key3 = static_cast<prop_anim::BezierKey*>(key3.get());
 			bezier_key3->value = 0.f;
 			bezier_key3->in_handle = {-0.25, 0.0f};
@@ -238,21 +237,21 @@ int main() {
 			auto bezier_track_y = prop_anim::BezierTrack::create();
 			auto y_binding = std::make_unique<prop_anim::MemberBinding<Vector2, float>>("float", obj->pos, &Vector2::y);
 			bezier_track_y->set_property_binding(std::move(y_binding));
-			auto key1 = bezier_track_y->create_key(0.0f);
+			auto key1 = prop_anim::BezierKey::create(0.0f);
 			auto bezier_key1 = static_cast<prop_anim::BezierKey*>(key1.get());
 			bezier_key1->value = 0.f;
 			bezier_key1->in_handle = {-0.25, 0.0f};
 			bezier_key1->out_handle = {0.25f, 0.0f};
 			bezier_track_y->insert_sorted(std::move(key1));
 
-			auto key2 = bezier_track_y->create_key(2.0f);
+			auto key2 = prop_anim::BezierKey::create(2.0f);
 			auto bezier_key2 = static_cast<prop_anim::BezierKey*>(key2.get());
 			bezier_key2->value = 720.f - 100.f;
 			bezier_key2->in_handle = {-0.25, 0.0f};
 			bezier_key2->out_handle = {0.25f, 0.0f};
 			bezier_track_y->insert_sorted(std::move(key2));
 
-			auto key3 = bezier_track_y->create_key(4.0f);
+			auto key3 = prop_anim::BezierKey::create(4.0f);
 			auto bezier_key3 = static_cast<prop_anim::BezierKey*>(key3.get());
 			bezier_key3->value = 0.f;
 			bezier_key3->in_handle = {-0.25, 0.0f};

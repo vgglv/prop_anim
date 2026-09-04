@@ -1,9 +1,7 @@
 #pragma once
+#include "key.hpp"
 #include <memory>
 #include <vector>
-#include "key.hpp"
-#include "type_registry.hpp"
-#include "property_binding.hpp"
 
 namespace prop_anim {
 	class Track;
@@ -23,7 +21,6 @@ namespace prop_anim {
 		void insert_sorted(KeyUniqPtr key);
 		void remove_key(uint32_t idx);
 		void sort();
-		virtual KeyUniqPtr create_key(float time) = 0;
 		BaseKey* find_key(uint32_t idx);
 
 		virtual void setup_pose() {};

@@ -1,4 +1,4 @@
-#include "prop_anim/easing.hpp"
+#include <prop_anim/easing.hpp>
 
 namespace prop_anim {
 	float apply_easing(const EasingType& e, float t) {
