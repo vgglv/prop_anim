@@ -49,6 +49,16 @@ namespace prop_anim {
 		}
 	}
 
+	BaseKey* Track::find_key(uint32_t idx) {
+		const auto& it = std::find_if(_keys_vec.begin(), _keys_vec.end(), [idx](const KeyUniqPtr& track) {
+			return track->idx == idx;
+		});
+		if (it != _keys_vec.end()) {
+			return (*it).get();
+		}
+		return nullptr;
+	}
+
 	const std::vector<KeyUniqPtr>& Track::get_keys() const {
 		return _keys_vec;
 	}

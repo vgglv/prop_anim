@@ -24,6 +24,7 @@ namespace prop_anim {
 		void remove_key(uint32_t idx);
 		void sort();
 		virtual KeyUniqPtr create_key(float time) = 0;
+		BaseKey* find_key(uint32_t idx);
 
 		virtual void setup_pose() {};
 		const std::vector<KeyUniqPtr>& get_keys() const;
