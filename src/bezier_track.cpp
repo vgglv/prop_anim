@@ -1,5 +1,4 @@
 #include <any>
-#include <cstdio>
 #include <prop_anim/bezier_track.hpp>
 #include <prop_anim/curve.hpp>
 #include <prop_anim/bezier.hpp>
@@ -28,7 +27,6 @@ namespace prop_anim {
 			Point p2 = { p3.x + key_right->in_handle.x, p3.y + key_right->in_handle.y };
 
 			float value = evaluate_bezier(t, p0, p1, p2, p3);
-			printf("p0=[%.2f, %.2f], p1=[%.2f, %.2f], p2=[%.2f, %.2f], p3=[%.2f, %.2f], t=%.2f, v=%.2f\n", p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, t, value);
 			_binding->set(value);
 		}
 	}
