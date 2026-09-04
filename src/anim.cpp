@@ -43,7 +43,7 @@ namespace prop_anim {
 		return nullptr;
 	}
 
-	std::string_view Anim::name() const {
+	const std::string& Anim::name() const {
 		return _name;
 	}
 

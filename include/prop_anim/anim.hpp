@@ -18,7 +18,7 @@ namespace prop_anim {
 		void remove_track(TrackIdx idx);
 		[[nodiscard]] float get_duration() const;
 		Track* find_track(TrackIdx idx);
-		[[nodiscard]] std::string_view name() const;
+		[[nodiscard]] const std::string& name() const;
 		const std::vector<TrackUniqPtr>& get_tracks() const;
 	
 	private:
